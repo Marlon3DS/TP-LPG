@@ -1,5 +1,6 @@
 package Principal;
 
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,13 +18,18 @@ public class TP_LPG {
                                                   "3 - Alterar Item",
                                                   "4 - Excluir Item",
                                                   "5 - Sair"};
+    //Variavel ArrayList
+    private static ArrayList Contas = new ArrayList();
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int opcao = Menu();
-        CarregarOpcao(opcao);
+        int opcao = 0;
+        do {
+            opcao = Menu();
+            CarregarOpcao(opcao);
+        } while (opcao != 5);
     }
     
 //region Métodos para Interação com o Usuário
@@ -39,8 +45,10 @@ public class TP_LPG {
                 saida += opcoes[i] + "\n";
             }
             saida += "Escolha uma Opção";
-            //opcao recebe o Valor convertido ou -1 em caso de erro
-            opcao = TryParseInt(JOptionPane.showInputDialog(saida));
+            String entrada = JOptionPane.showInputDialog(saida);
+            //Verifica se for null (usuário Cancelou ação) atribui 5
+            //senão opcao recebe o Valor convertido ou -1 em caso de erro
+            opcao = entrada == null ? 5 : TryParseInt(entrada);
             //valida se é uma opção verdadeira    
             if (opcao >= 1 && opcao <= opcoes.length) {
                 //caso verdadeira sai do laço
@@ -72,23 +80,20 @@ public class TP_LPG {
         return retorno;
     }
      
-//endregion
-     
-//region Métodos de Controle
-     
+     //Método para Executar a Opcao selecionada
      public static void CarregarOpcao(int opcao){
          switch (opcao) {
              case 1:
-                 
+                 ListarItens();
                  break;
              case 2:
-                 
+                 //TODO Incluir();
                  break;
              case 3:
-                 
+                 //TODO Alterar();
                  break;
              case 4:
-                 
+                 //TODO Excluir();
                  break;
              case 5:
                  JOptionPane.showMessageDialog(null, "Até Mais! o/");
@@ -96,6 +101,18 @@ public class TP_LPG {
              default:
                  throw new AssertionError();
          }
+     }
+     
+//endregion
+     
+//region Métodos de Controle
+     
+     public static void ListarItens(){
+         String saida = "";
+         for (int i = 0; i < Contas.size(); i++) {
+             saida += String.format("%s\n", Contas.get(i));
+         }
+         JOptionPane.showMessageDialog(null, saida);
      }
      
 //endregion
