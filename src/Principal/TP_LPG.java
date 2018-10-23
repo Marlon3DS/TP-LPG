@@ -12,15 +12,17 @@ import javax.swing.JOptionPane;
 public class TP_LPG {
     
     //Propriedades Privadas
-    //Variavel das opções de Menu
-    private static String opcoes[] = new String[]{"1 - Listar Itens",
-                                                  "2 - Incluir Item",
-                                                  "3 - Alterar Item",
-                                                  "4 - Excluir Item",
-                                                  "5 - Sair"};
-    //Variavel ArrayList
-    private static ArrayList Contas = new ArrayList();
-    
+    //Constante das opções de Menu
+    private static final String OPCOES[] = new String[]{"1 - Listar Itens",
+                                                        "2 - Incluir Item",
+                                                        "3 - Alterar Item",
+                                                        "4 - Excluir Item",
+                                                        "5 - Sair"};
+    //Constante das Propriedades da Conta
+    private static final String PROPIEDADE_CONTA[] = new String[]{"Nome", "Valor", "Data de Pagamento"};
+    //Variavel ArrayList para Contas
+    private static ArrayList<String[]> Contas = new ArrayList<String[]>();
+        
     /**
      * @param args the command line arguments
      */
@@ -41,8 +43,8 @@ public class TP_LPG {
         do {
             String saida = "Cadastro de Contas a Pagar - Menu\n";
             //Laço para Ler Array opcoes
-            for (int i = 0; i < opcoes.length; i++) {
-                saida += opcoes[i] + "\n";
+            for (int i = 0; i < OPCOES.length; i++) {
+                saida += OPCOES[i] + "\n";
             }
             saida += "Escolha uma Opção";
             String entrada = JOptionPane.showInputDialog(saida);
@@ -50,15 +52,24 @@ public class TP_LPG {
             //senão opcao recebe o Valor convertido ou -1 em caso de erro
             opcao = entrada == null ? 5 : TryParseInt(entrada);
             //valida se é uma opção verdadeira    
-            if (opcao >= 1 && opcao <= opcoes.length) {
+            if (opcao >= 1 && opcao <= OPCOES.length) {
                 //caso verdadeira sai do laço
                 break;
             }
             //exibe mensagem somente se o if falhar
             JOptionPane.showMessageDialog(null, "Opção Inválida!\n");
-        } while (opcao < 1 || opcao > opcoes.length);
+        } while (opcao < 1 || opcao > OPCOES.length);
         //retorna o valor da opcao
         return opcao;
+    }
+    //Ler os dados de uma conta e retorna um Array
+    public static String[] LerConta(){
+        String conta[] = new String[3];
+        for (int i = 0; i < conta.length; i++) {
+            String entrada = JOptionPane.showInputDialog(String.format("Digite o %s da Conta", PROPIEDADE_CONTA[i]));
+            conta[i] = entrada;
+        }
+        return conta;
     }
     
 //endregion
@@ -80,6 +91,11 @@ public class TP_LPG {
         return retorno;
     }
      
+     public static float TryParseFloat(String entrada){
+         entrada = entrada.replace(',', '.');
+         return Float.parseFloat(entrada);
+     }
+     
      //Método para Executar a Opcao selecionada
      public static void CarregarOpcao(int opcao){
          switch (opcao) {
@@ -87,7 +103,7 @@ public class TP_LPG {
                  ListarItens();
                  break;
              case 2:
-                 //TODO Incluir();
+                 Incluir();
                  break;
              case 3:
                  //TODO Alterar();
@@ -110,10 +126,16 @@ public class TP_LPG {
      public static void ListarItens(){
          String saida = "";
          for (int i = 0; i < Contas.size(); i++) {
-             saida += String.format("%s\n", Contas.get(i));
+            saida += String.format("%s", Contas.get(i)[0]);
+            saida += String.format(" | R$%.2f", TryParseFloat(Contas.get(i)[1]));
+            saida += String.format(" | %s\n", Contas.get(i)[2]);
          }
          JOptionPane.showMessageDialog(null, saida);
      }
      
+     public static void Incluir(){
+         String conta[] = LerConta();
+         Contas.add(conta);
+     }
 //endregion
 }
