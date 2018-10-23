@@ -106,10 +106,10 @@ public class TP_LPG {
                  Incluir();
                  break;
              case 3:
-                 //TODO Alterar();
+                 Alterar();
                  break;
              case 4:
-                 //TODO Excluir();
+                 Excluir();
                  break;
              case 5:
                  JOptionPane.showMessageDialog(null, "Até Mais! o/");
@@ -136,6 +136,30 @@ public class TP_LPG {
      public static void Incluir(){
          String conta[] = LerConta();
          Contas.add(conta);
+     }
+     
+     public static void Alterar(){
+         String valorProcurado = JOptionPane.showInputDialog("Insira o Nome da Conta.");
+         int indice = Localizar(valorProcurado);
+         String conta[] = LerConta();
+         Contas.set(indice, conta);
+     }
+     
+     public static void Excluir(){
+         String valorProcurado = JOptionPane.showInputDialog("Insira o Nome da Conta.");
+         int indice = Localizar(valorProcurado);
+         Contas.remove(indice);
+     }
+     
+     public static int Localizar(String valorProcurado){
+         for (int i = 0; i < Contas.size(); i++) {
+             for (int j = 0; j < Contas.get(i).length; j++) {
+                 if (Contas.get(i)[j].equals(valorProcurado)) {
+                     return i;
+                 }
+             }
+         }
+         return -1;
      }
 //endregion
 }
