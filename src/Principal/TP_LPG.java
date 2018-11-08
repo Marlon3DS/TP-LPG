@@ -66,10 +66,18 @@ public class TP_LPG {
     //Ler os dados de uma conta e retorna um Array
     public static String[] LerConta(){
         String conta[] = new String[3];
-        for (int i = 0; i < conta.length; i++) {
+        int i = 0;
+        //for (int i = 0; i < conta.length; i++) 
+        do {
             String entrada = JOptionPane.showInputDialog(String.format("Digite o %s da Conta", PROPIEDADE_CONTA[i]));
-            conta[i] = entrada;
-        }
+            if(entrada == null){
+                return null;
+            }
+            if(!"".equals(entrada)){
+                conta[i] = entrada;
+                i++;
+            }
+        }while(i < conta.length);
         return conta;
     }
     
@@ -126,6 +134,10 @@ public class TP_LPG {
      
      public static void ListarItens(){
          String saida = "";
+         if (Contas.size() < 1){
+             JOptionPane.showMessageDialog(null,"Nenhuma conta cadastrada!");
+             return;
+         }
          for (int i = 0; i < Contas.size(); i++) {
             saida += String.format("%s", Contas.get(i)[0]);
             saida += String.format(" | R$%.2f", TryParseFloat(Contas.get(i)[1]));
@@ -136,19 +148,31 @@ public class TP_LPG {
      
      public static void Incluir(){
          String conta[] = LerConta();
-         Contas.add(conta);
+         if(conta != null){
+             Contas.add(conta);
+         }
      }
      
      public static void Alterar(){
          String valorProcurado = JOptionPane.showInputDialog("Insira o Nome da Conta.");
          int indice = Localizar(valorProcurado);
+         if(indice == -1){
+             JOptionPane.showMessageDialog(null,"Conta não localizada!");
+             return;
+         }
          String conta[] = LerConta();
-         Contas.set(indice, conta);
+         if(conta != null){
+            Contas.set(indice, conta);
+         }
      }
      
      public static void Excluir(){
          String valorProcurado = JOptionPane.showInputDialog("Insira o Nome da Conta.");
          int indice = Localizar(valorProcurado);
+         if(indice == -1){
+             JOptionPane.showMessageDialog(null,"Conta não localizada!");
+             return;
+         }
          Contas.remove(indice);
      }
      
